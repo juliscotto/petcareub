@@ -1,6 +1,8 @@
 {
   "name": "petcareUB",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "47dfcc71"
 }

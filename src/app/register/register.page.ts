@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { auth } from 'firebase/app'
 import { AngularFireAuth } from '@angular/fire/auth'
+import { Router } from '@angular/router'
+
+import { AngularFirestore } from '@angular/fire/firestore'
+import { UserService } from '../user.service';
 
 import { AlertController } from '@ionic/angular'
 
@@ -11,6 +15,7 @@ import { AlertController } from '@ionic/angular'
 })
 export class RegisterPage implements OnInit {
 	
+	fullname: string = ""
 	email: string = ""
 	password: string = ""
 	cpassword: string = ""
@@ -18,14 +23,19 @@ export class RegisterPage implements OnInit {
 
 	constructor(
 		public afAuth: AngularFireAuth,
-		public alert: AlertController		
+		public afstore: AngularFirestore,
+		public user: UserService,
+		public alert: AlertController,
+		public router: Router	
+
 		) { }
 
 	ngOnInit() {
 	}
 
+	
 	async register(){
-		const { email, password, cpassword } = this
+		const { fullname,email, password, cpassword } = this
 		if(password !== cpassword) {
 			this.showAlert("Error", "Passwords don't match")
 			return console.error("Passwords don't match!")
@@ -34,7 +44,21 @@ export class RegisterPage implements OnInit {
 		try{
 			const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
 			console.log(res)
-			this.showAlert("Success!", "Walcome")
+
+			this.afstore.doc(`users/${res.user.uid}`).set({
+				fullname,
+				email
+			})
+
+			this.user.setUser({
+					fullname,
+					email,
+					uid: res.user.uid
+				})
+			
+
+			this.showAlert("Success!", "Welcome")
+			this.router.navigate(['/tabs'])
 		} catch(error){
 			console.dir(error)
 			this.showAlert("Error", error.message)

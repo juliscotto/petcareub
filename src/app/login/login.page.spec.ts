@@ -27,11 +27,12 @@ describe('LoginPage', () => {
 });
 
 signUp() {
-    Parse.User.signUp(this.username, this.password).then((resp) => {
+    Parse.User.signUp(this.fullname,this.email, this.password).then((resp) => {
       console.log('Logged in successfully', resp);
 
       // Clears up the form
-      this.username = '';
+      this.fullname = '';
+      this.email = '';
       this.password = '';
 
       this.toastCtrl.create({

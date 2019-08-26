@@ -1,9 +1,72 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>uploader</ion-title>
+  <ion-toolbar >
+    <ion-title>Registrar Mascota</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+  <ion-list>
+
+    <ion-item>
+        <ion-label>Nombre</ion-label>
+        <ion-input type="text" [(ngModel)]="namePet">
+        </ion-input>
+    </ion-item>
+
+	<ion-card class="ion-card">
+		<ion-item *ngFor="let gender of genders; let i = index" >
+			<ion-label >{{gender.name}}</ion-label>
+			<ion-checkbox [(ngModel)]="gender.selected"
+        [disabled]="genders[i].value" 
+        (click)="selection(gender.name);" >
+			</ion-checkbox>
+		</ion-item>
+	</ion-card>
+
+
+
+    <ion-item>
+	    <ion-label>Tipo de Mascota</ion-label>
+	    <ion-select  #S [interfaceOptions]="customPopoverOptions" interface="popover"  value="dog" okText="Okay" cancelText="Dismiss" [(ngModel)]="type"
+	    (ionChange)="onChange(S.value)">
+	      <ion-select-option value="perro">Perro</ion-select-option>
+	      <ion-select-option value="gato">Gato</ion-select-option>
+	      <ion-select-option value="conejo">Conejo</ion-select-option>
+	      <ion-select-option value="ave">Ave</ion-select-option>
+	      <ion-select-option value="hamster">Hamster</ion-select-option>
+	      <ion-select-option value="reptil">Reptil</ion-select-option>
+	      <ion-select-option value="pez">Pez</ion-select-option>
+	      <ion-select-option value="other" >Otro</ion-select-option>
+
+	    </ion-select>
+		    
+  	</ion-item>
+
+	<ion-item *ngIf="hide" >
+		<ion-label>Escriba el tipo de mascota</ion-label>
+	        	<ion-input type="text" [(ngModel)]="otherType">
+	        	</ion-input>
+	</ion-item>
+ 
+
+
+    <ion-item>
+        <ion-label>Raza</ion-label>
+        <ion-input type="text" [(ngModel)]="breed">
+        </ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label >Fecha de Nacimiento</ion-label>
+      <ion-input type="date" [(ngModel)]="birthday">
+      </ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-button fill="solid" expand="block" color="dark" (click)="registerPet()">Agregar Mascota</ion-button>
+
 </ion-content>
+

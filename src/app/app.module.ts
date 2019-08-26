@@ -12,6 +12,7 @@ import firebaseConfig from './firebase'
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { UserService } from './user.service';
+import { PetService } from './pet.service';
 import { AngularFirestore,AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { AngularFirestore,AngularFirestoreModule } from '@angular/fire/firestore
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     UserService,
+    PetService,
     AngularFirestore
   ],
   bootstrap: [AppComponent]

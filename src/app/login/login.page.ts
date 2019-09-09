@@ -13,6 +13,8 @@ export class LoginPage implements OnInit {
 	fullname: string = ""
 	email: string = ""
 	password: string = ""
+	vetApproved: boolean = false
+	vetcertificate:string = ""
 
 	
 	constructor(
@@ -24,7 +26,7 @@ export class LoginPage implements OnInit {
 	ngOnInit() { }
 
 	async login() {
-		const { fullname, email, password} = this
+		const { fullname, email, password, vetApproved, vetcertificate} = this
 		try {
 			const res =await this.afAuth.auth.signInWithEmailAndPassword(email, password)
 		
@@ -33,6 +35,8 @@ export class LoginPage implements OnInit {
 				this.user.setUser({
 					fullname,
 					email,
+					vetApproved,
+					vetcertificate,
 					uid: res.user.uid
 				})
 				this.router.navigate(['/tabs'])

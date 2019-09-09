@@ -32,9 +32,30 @@
       </ion-input>
     </ion-item>
 
+    <ion-card class="ion-card">
+		<ion-item  >
+			<ion-label >Soy veterinario/a</ion-label>
+			<ion-checkbox  (click)="addValue($event)" [(ngModel)]="checked">
+			</ion-checkbox>
+		</ion-item>
+	</ion-card>
+
+	<ion-item *ngIf="hide" >
+		<ion-label>Matricula</ion-label>
+	        	<ion-input type="text" [(ngModel)]="vetcertificate">
+	        	</ion-input>
+	</ion-item>
+
   </ion-list>
 
   <ion-button fill="solid" expand="block" color="dark" (click)="register()">Signup</ion-button>
+
+  <ion-item-divider>
+  </ion-item-divider>
+  <div class="ion-text-center">
+        <h3></h3>
+  </div>
+  <ion-button expand="block" (click)="redirectLogin()" >Iniciar Sesion</ion-button>
 
 </ion-content>
 

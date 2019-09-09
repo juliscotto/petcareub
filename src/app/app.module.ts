@@ -13,7 +13,12 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { UserService } from './user.service';
 import { PetService } from './pet.service';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFirestore,AngularFirestoreModule } from '@angular/fire/firestore';
+import { FilePath } from '@ionic-native/file-path/ngx';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { Subject } from 'rxjs';
+import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,7 +38,12 @@ import { AngularFirestore,AngularFirestoreModule } from '@angular/fire/firestore
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     UserService,
     PetService,
-    AngularFirestore
+    AngularFireDatabase,
+    AngularFirestore,
+    FilePath,
+    FileChooser,
+    IOSFilePicker
+
   ],
   bootstrap: [AppComponent]
 })

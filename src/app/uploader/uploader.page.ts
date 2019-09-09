@@ -33,7 +33,8 @@ export class UploaderPage implements OnInit {
 	breed: string = ""
 	birthday: string = ""
 	id: string = ""
-	uidOwner : string =""
+	uidOwner : string = ""
+	idVet : string = ""
 	otherType : string = ""
 
 
@@ -74,7 +75,7 @@ async registerPet(){
 	}else{
 		this.type =this.type
 	}
-	const { namePet,gender, type, breed,birthday,id,uidOwner } = this
+	const { namePet, gender, type, breed, birthday, id, uidOwner, idVet } = this
 	const user = await this.isLoggedIn()
 	try{
 		
@@ -85,6 +86,7 @@ async registerPet(){
 			breed,
 			birthday,
 			uidOwner : user.uid,
+			idVet,
 			id : this.afstore.createId()
 
 		})
@@ -96,6 +98,7 @@ async registerPet(){
 				breed,
 				birthday,
 				uidOwner,
+				idVet,
 				id
 			})
 		

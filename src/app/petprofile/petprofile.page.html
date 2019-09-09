@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs"></ion-back-button>
+    </ion-buttons>
+  
+    <ion-title>perfil de mascota</ion-title>
+  </ion-toolbar>
+
+  
+
+
+</ion-header>
+
+<ion-content>
+
+	<ion-card class="petname" *ngFor= "let pet of (userPets | async)" >
+	  <ion-card-header >
+	    <ion-card-title>{{pet.namePet}}</ion-card-title>
+	    <ion-card-subtitle>{{pet.type}}</ion-card-subtitle>
+	    <ion-card-subtitle>{{pet.gender}}</ion-card-subtitle>
+	    <ion-card-subtitle>{{age(pet.birthday)}}</ion-card-subtitle>
+	  </ion-card-header>
+
+	  <ion-card-content>
+	    
+	  </ion-card-content>
+	</ion-card>
+
+	<ion-button expand="block" (click)="redirectMedicalHistory()" >agregar nueva entrada</ion-button>
+	<ion-button expand="block">editar mascota</ion-button>
+	<ion-button expand="block">eliminar mascota</ion-button>
+
+</ion-content>

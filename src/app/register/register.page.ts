@@ -19,6 +19,11 @@ export class RegisterPage implements OnInit {
 	email: string = ""
 	password: string = ""
 	cpassword: string = ""
+	vetApproved: boolean = false
+	vetcertificate:string = ""
+
+	message: string = ""
+	hide:boolean = false
 
 
 	constructor(
@@ -33,9 +38,19 @@ export class RegisterPage implements OnInit {
 	ngOnInit() {
 	}
 
+	checked : boolean = false;
+  	addValue(e): void {
+    	var isChecked = e.currentTarget.checked;
+    	if(this.checked){
+    		this.hide = false
+    	}else{
+    		this.hide = true
+    	}
+
+  	}	
 	
 	async register(){
-		const { fullname,email, password, cpassword } = this
+		const { fullname,email, password, cpassword, vetApproved, vetcertificate} = this
 		if(password !== cpassword) {
 			this.showAlert("Error", "Passwords don't match")
 			return console.error("Passwords don't match!")
@@ -48,23 +63,37 @@ export class RegisterPage implements OnInit {
 
 			this.afstore.doc(`users/${res.user.uid}`).set({
 				fullname,
-				email
+				email,
+				vetApproved,
+				vetcertificate
 			})
 
 			this.user.setUser({
 					fullname,
 					email,
+					vetApproved,
+					vetcertificate,
 					uid: res.user.uid
 				})
-			
 
-			this.showAlert("Success!", "Welcome")
+			if(this.checked){
+				this.message ="Nos tomaremos un dias en comprobar la validez de su matricula."
+			}else{
+				this.message ="Bienvenido"
+			}
+			
+			
+			this.showAlert("Registro correcto", this.message)
 			this.router.navigate(['/tabs'])
 		} catch(error){
 			console.dir(error)
 			this.showAlert("Error", error.message)
 		}
 		
+	}
+
+	redirectLogin(){
+		this.router.navigate(['/login'])
 	}
 
 	async showAlert(header: string, message: string){

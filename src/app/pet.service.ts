@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import {  AngularFireList } from 'angularfire2/database'
+import { AngularFireList } from '@angular/fire/database'
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore'
 import { first, tap } from 'rxjs/operators';
@@ -50,28 +50,7 @@ export class PetService {
 	}
 	
 
-	 /*getPetsList() {
-		 let posts = [];
-		 this.afAuth.authState.subscribe(user => {
-			 this.user = user;
-			
-			 this.afstore.collection<any>("pets", ref => ref.where('uidOwner', '==', this.user.uid)).valueChanges().subscribe(data => { 
-				 posts.push(data);
-			 })
-
-
-			 //this.afstore.collection<any>("pets", ref => ref.where('uidOwner', '==', this.user.uid)).valueChanges()
-		 });
-
-		 
-		 return posts
-
-		 
-		 
-		
-		
-		
-	}*/
+	
 
 	setPet(pet: pet){
 		this.pet = pet

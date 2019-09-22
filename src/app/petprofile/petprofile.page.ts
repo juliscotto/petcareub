@@ -3,20 +3,48 @@ import { ActivatedRoute } from '@angular/router';
 import { PetService } from '../pet.service';
 import { Router } from '@angular/router';
 import { IonicModule } from 'ionic-angular';
+import { AngularFireDatabase } from '@angular/fire/database';
+import { Observable } from 'rxjs/Observable';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage'
+import { ToastController } from 'ionic-angular/components/toast/toast-controller'
+import { InAppBrowser } from '@ionic-native/in-app-browser'; 
+import { Injectable } from '@angular/core';
+import 'rxjs/add/operator/map'
+import { AngularFireAuth } from '@angular/fire/auth';
+import { first } from 'rxjs/operators';
+
+import { Platform } from '@ionic/angular';
+import { File } from '@ionic-native/file/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 
 @Component({
   selector: 'app-petprofile',
   templateUrl: './petprofile.page.html',
   styleUrls: ['./petprofile.page.scss'],
 })
+
 export class PetprofilePage implements OnInit {
 	userPets
 	petID: string = ""
+	files: Observable<any[]>;
 
 	constructor(
 		private route: ActivatedRoute,
 		private pets: PetService,
-		public router: Router) { 
+		public router: Router,
+		private db: AngularFireDatabase,
+		private afStorage: AngularFireStorage,
+		public afAuth: AngularFireAuth,
+		private platform: Platform, 
+		private file: File, 
+		private ft: FileTransfer,
+		private fileOpener: FileOpener, 
+		private document: DocumentViewer
+		
+		) { 
+
 		
 		
 	}
@@ -28,9 +56,38 @@ export class PetprofilePage implements OnInit {
 
 	  this.userPets = this.pets.getPet(this.petID)
 
+  
   }
 
+	openLocalPdf() {
+		let filePath = this.file.applicationDirectory + 'www/assets';
+
+		if (this.platform.is('android')) {
+			let fakeName = Date.now();
+			this.file.copyFile(filePath, '5-tools.pdf', this.file.dataDirectory, `${fakeName}.pdf`).then(result => {
+				this.fileOpener.open(result.nativeURL, 'application/pdf')
+					.then(() => console.log('File is opened'))
+					.catch(e => console.log('Error opening file', e));
+			})
+		} else {
+			// Use Document viewer for iOS for a better UI
+			const options: DocumentViewerOptions = {
+				title: 'My PDF'
+			}
+			this.document.viewDocument(`${filePath}/5-tools.pdf`, 'application/pdf', options);
+		}
+	}
+
+
+
+	
+
+
+	isLoggedIn() {
+		return this.afAuth.authState.pipe(first()).toPromise();
+	}
 	redirectMedicalHistory() {
+		
 		this.router.navigate(['/uploadmedicalhistory/' + this.petID])
 	}
 

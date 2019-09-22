@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
+import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -21,6 +22,9 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [RegisterPage]
+  declarations: [RegisterPage],
+   providers: [
+    AngularFireAuth
+  ]
 })
 export class RegisterPageModule {}

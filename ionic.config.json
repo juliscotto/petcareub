@@ -1,7 +1,8 @@
 {
   "name": "petcareUB",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular",
   "id": "47dfcc71"

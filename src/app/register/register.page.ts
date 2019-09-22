@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { auth } from 'firebase/app'
-import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router'
 
 import { AngularFirestore } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
 
 import { AlertController } from '@ionic/angular'
+
+
 
 @Component({
   selector: 'app-register',
@@ -26,7 +28,9 @@ export class RegisterPage implements OnInit {
 	hide:boolean = false
 
 
+
 	constructor(
+
 		public afAuth: AngularFireAuth,
 		public afstore: AngularFirestore,
 		public user: UserService,
@@ -57,6 +61,7 @@ export class RegisterPage implements OnInit {
 		}
 
 		try{
+			
 			const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
 			console.log(res)
 			

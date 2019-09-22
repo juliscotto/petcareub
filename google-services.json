@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "225428279040",
+    "firebase_url": "https://pet-care-bae4a.firebaseio.com",
+    "project_id": "pet-care-bae4a",
+    "storage_bucket": "pet-care-bae4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225428279040:android:66b334f954e8b9fde16de5",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225428279040-enhfhqjhn3t0a3l1li19fvi3rh96jhfq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaTN1vplkWt52lIGqtMkveKT-ypM5OTv0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225428279040-enhfhqjhn3t0a3l1li19fvi3rh96jhfq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

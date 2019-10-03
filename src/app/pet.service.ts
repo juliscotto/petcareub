@@ -33,6 +33,13 @@ export class PetService {
 		public afs: AngularFirestore) {
 	
 	}
+
+	getPetMedicalHistories(petID: any) {
+		const pets = this.afs.collection<any>("medicalhistoryentries", ref =>
+			ref.where('petID', '==', petID))
+		this.petData = pets.valueChanges();
+		return this.petData
+	}
 	
 	
 	getPetsList() {

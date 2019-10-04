@@ -123,7 +123,8 @@ export class UploadmedicalhistoryPage implements OnInit {
 				diagnosis,
 				comments,
 				fileUri,
-				petID, 
+				petID,
+				date: Date(), 
 				id: this.afstore.createId()
 
 			})
@@ -134,6 +135,7 @@ export class UploadmedicalhistoryPage implements OnInit {
 				comments,
 				petID,
 				fileUri,
+				date: Date(),
 				id,
 	
 			})

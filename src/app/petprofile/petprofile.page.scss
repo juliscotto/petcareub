@@ -1,0 +1,37 @@
+.medical {
+max-height: 400px;
+  overflow: hidden;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  align-content: center;
+}
+
+ion-title{
+    font-size:15px;
+}
+
+
+.card-title{
+	font-size:20px;
+}
+
+.medical-card{
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+	align-self: center;
+    width: 80% !important;
+    box-shadow: none !important;
+    
+}
+
+.line{
+    height: 0%;
+	border-bottom: 0px solid #6694f6 !important;
+	margin-left: auto;
+    margin-right: auto;
+	width: 90%;
+}
+

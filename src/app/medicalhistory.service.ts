@@ -13,6 +13,7 @@ interface medicalhistory {
 	comments: string,
 	petID: string,
 	fileUri: string,
+	date: string,
 	id: string
 }
 

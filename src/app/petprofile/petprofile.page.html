@@ -26,12 +26,25 @@
 	  <ion-card-content>
 	    
 	  </ion-card-content>
+
 	</ion-card>
 
-	<ion-item ion-item *ngFor="let medicalhistory of (medicalHistories | async)">
-		<ion-button expand="full" (click)="downloadAndOpenPdf(medicalhistory.fileUri)">{{medicalhistory.diagnosis}}</ion-button>
-	</ion-item>
+	<ion-item  color="transparent"  lines="none" class="line"></ion-item>
 
+	<ion-toolbar>
+  		<ion-title >Entradas al Historial Medico</ion-title>
+	</ion-toolbar>
+
+	<ion-list class="medical">
+		<ion-card class="medical-card" *ngFor="let medicalhistory of (medicalHistories | async)">
+			<ion-card-header>
+				<ion-card-title class="card-title">{{medicalhistory.diagnosis}}</ion-card-title>
+				<ion-card-subtitle>{{medicalhistory.date | date: 'dd/MM/yyyy'}}</ion-card-subtitle>
+				<ion-card-subtitle>Veterinario: {{medicalhistory.vetName}}</ion-card-subtitle>
+				<ion-button size="small" expand="block" fill="outline" (click)="downloadAndOpenPdf(medicalhistory.fileUri)">Documento</ion-button>
+			</ion-card-header>
+		</ion-card>
+	</ion-list>
 	
 
 	<ion-button expand="block" (click)="redirectMedicalHistory()" >agregar nueva entrada</ion-button>

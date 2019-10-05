@@ -31,6 +31,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase, AngularFireList } from 
 import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FirestoreSettingsToken } from '@angular/fire/firestore';
 import firebase from "@firebase/app";
+
 import "@firebase/auth";
 import "@firebase/firestore";
 

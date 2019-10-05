@@ -15,6 +15,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { map, filter, switchMap, finalize } from 'rxjs/operators';
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable';
+import { Platform } from '@ionic/angular';
 
 
 @Component({
@@ -48,7 +49,8 @@ export class UploadmedicalhistoryPage implements OnInit {
 		public afstore: AngularFirestore,
 		public alert: AlertController,
 		private afStorage: AngularFireStorage,
-		private db: AngularFireDatabase
+		private db: AngularFireDatabase,
+		public platform: Platform
 
 		) {
 		 }
@@ -62,21 +64,52 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 
 	upload() {
-		this.fileChooser.open().then((uri) => {
-			alert(uri);
 
-			this.filePath.resolveNativePath(uri).then(filePath => {
-				alert(filePath);
-				let dirPathSegments = filePath.split('/');
-				let fileName = dirPathSegments[dirPathSegments.length - 1];
-				dirPathSegments.pop();
-				let dirPath = dirPathSegments.join('/');
-				this.file.readAsArrayBuffer(dirPath, fileName).then(async (buffer) => {
-					await this.upload2(buffer, fileName);
-				}).catch((err) => {
-					alert(err.toString());
+		this.platform.ready().then(() => {
+			if (this.platform.is('android')) {
+				this.fileChooser.open().then((uri) => {
+					alert(uri);
+
+					this.filePath.resolveNativePath(uri).then(filePath => {
+						alert(filePath);
+						let dirPathSegments = filePath.split('/');
+						let fileName = dirPathSegments[dirPathSegments.length - 1];
+						dirPathSegments.pop();
+						let dirPath = dirPathSegments.join('/');
+						this.file.readAsArrayBuffer(dirPath, fileName).then(async (buffer) => {
+							await this.upload2(buffer, fileName);
+						}).catch((err) => {
+							alert(err.toString());
+						});
+					});
 				});
-			});
+
+			} else if (this.platform.is('ios')) {
+				this.filePicker.pickFile()
+					.then(uri => { 
+						alert(uri);
+						let correctPath = uri.substr(0, uri.lastIndexOf('/') + 1);
+						let currentName = uri.substring(uri.lastIndexOf('/') + 1);
+
+					
+								
+						this.file.readAsArrayBuffer("file:///" + correctPath, currentName).then(async (buffer) => {
+							await this.upload2(buffer, currentName);
+								}).catch((err) => {
+									alert(err.toString());
+								});
+							
+						
+							
+						
+
+						
+					});
+
+					
+			} else {
+				// fallback to browser APIs
+			}
 		});
 	}
 

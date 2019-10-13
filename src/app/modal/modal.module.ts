@@ -2,15 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
-import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
+
 import { IonicModule } from '@ionic/angular';
-import { RegisterPage } from './register.page';
-import { Ng2TelInputModule } from 'ng2-tel-input';
+
+import { ModalPage } from './modal.page';
+
 
 const routes: Routes = [
   {
     path: '',
-    component: RegisterPage
+    component: ModalPage
   }
 ];
 
@@ -19,12 +20,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    Ng2TelInputModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [RegisterPage],
-   providers: [
-    AngularFireAuth
-  ]
+  declarations: [ModalPage]
 })
-export class RegisterPageModule {}
+export class ModalPageModule {}

@@ -21,6 +21,7 @@ export class RegisterPage implements OnInit {
 	email: string = ""
 	password: string = ""
 	cpassword: string = ""
+	phoneNumber: string = ""
 	vetApproved: boolean = false
 	vetcertificate:string = ""
 
@@ -40,6 +41,7 @@ export class RegisterPage implements OnInit {
 		) { }
 
 	ngOnInit() {
+		
 	}
 
 	checked : boolean = false;
@@ -54,7 +56,8 @@ export class RegisterPage implements OnInit {
   	}	
 	
 	async register(){
-		const { fullname,email, password, cpassword, vetApproved, vetcertificate} = this
+		const { fullname, email, phoneNumber, password, cpassword, vetApproved, vetcertificate } = this
+
 		if(password !== cpassword) {
 			this.showAlert("Error", "Passwords don't match")
 			return console.error("Passwords don't match!")
@@ -69,6 +72,7 @@ export class RegisterPage implements OnInit {
 			this.afstore.doc(`users/${res.user.uid}`).set({
 				fullname,
 				email,
+				phoneNumber,
 				vetApproved,
 				vetcertificate
 			})
@@ -76,6 +80,7 @@ export class RegisterPage implements OnInit {
 			this.user.setUser({
 					fullname,
 					email,
+					phoneNumber,
 					vetApproved,
 					vetcertificate,
 					uid: res.user.uid

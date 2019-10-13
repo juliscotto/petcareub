@@ -84,32 +84,27 @@ export class UploadmedicalhistoryPage implements OnInit {
 					});
 				});
 
+
 			} else if (this.platform.is('ios')) {
 				this.filePicker.pickFile()
 					.then(uri => { 
 						alert(uri);
 						let correctPath = uri.substr(0, uri.lastIndexOf('/') + 1);
 						let currentName = uri.substring(uri.lastIndexOf('/') + 1);
-
-					
 								
 						this.file.readAsArrayBuffer("file:///" + correctPath, currentName).then(async (buffer) => {
 							await this.upload2(buffer, currentName);
 								}).catch((err) => {
 									alert(err.toString());
 								});
-							
-						
-							
-						
-
 						
 					});
-
+								
 					
 			} else {
-				// fallback to browser APIs
+				alert("Esta funcion, por el momento, solo esta disponible para aplicacion mobil")
 			}
+			
 		});
 	}
 
@@ -175,6 +170,7 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 
 			this.showAlert("Success!", "Entrada guardada")
+			this.router.navigate(['/petprofile/' + this.petID])	
 
 
 

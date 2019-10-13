@@ -1,19 +1,26 @@
-import { Injectable } from '@angular/core'
+import { Injectable, Pipe } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
+
 
 interface user {
 	fullname: string,
 	email: string,
+	phoneNumber: string,
 	vetApproved: boolean,
 	vetcertificate: string,
 	uid: string
 }
 
+
 @Injectable()
 export class UserService {
 	private user: user
-
-	constructor(private afAuth: AngularFireAuth) {
+	userData
+	private itemsCollection: AngularFirestoreCollection<any>;
+	constructor(
+		private afAuth: AngularFireAuth,
+		public afs: AngularFirestore) {
 
 	}
 
@@ -28,6 +35,7 @@ export class UserService {
 				this.setUser({
 					fullname: this.user.fullname,
 					email: user.email,
+					phoneNumber: user.phoneNumber,
 					vetApproved: this.user.vetApproved,
 					vetcertificate: this.user.vetcertificate,
 					uid: user.uid
@@ -40,6 +48,16 @@ export class UserService {
 		} else {
 			return this.user.uid
 		}
+	}
+
+	
+	getUser(userID: any) {
+		
+		return this.afs.collection<any>('users').doc(userID).valueChanges()
+	
+		
+		
+		
 	}
 
 

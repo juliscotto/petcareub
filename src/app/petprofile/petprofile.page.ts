@@ -12,12 +12,17 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map'
 import { AngularFireAuth } from '@angular/fire/auth';
 import { first } from 'rxjs/operators';
-
+import { AlertController } from '@ionic/angular'
 import { Platform } from '@ionic/angular';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+
+
+
 
 @Component({
   selector: 'app-petprofile',
@@ -25,11 +30,23 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
   styleUrls: ['./petprofile.page.scss'],
 })
 
+
+
 export class PetprofilePage implements OnInit {
 	userPets
 	medicalHistories
 	petID: string = ""
+
+	docID: string = ""
 	files: Observable<any[]>;
+
+	private itemsCollection: AngularFirestoreCollection<any>;
+	items: Observable<any[]>;
+	countItems = 0;
+
+	qr_data: string = ""
+
+	created_code = {};
 
 	constructor(
 		private route: ActivatedRoute,
@@ -42,7 +59,10 @@ export class PetprofilePage implements OnInit {
 		private file: File, 
 		private ft: FileTransfer,
 		private fileOpener: FileOpener, 
-		private document: DocumentViewer
+		private document: DocumentViewer,
+		public afs: AngularFirestore,
+		public alertController: AlertController,
+		public qrController: NgxQRCodeModule
 		
 		) { 
 
@@ -57,13 +77,21 @@ export class PetprofilePage implements OnInit {
 
 	  this.userPets = this.pets.getPet(this.petID)
 
+	  
+
 	  this.medicalHistories = this.pets.getPetMedicalHistories(this.petID)
+
+	  this.qr_data = this.petID;
+
+
+	  this.created_code = this.qr_data;
+
+
   
   }
 
 
 	downloadAndOpenPdf(fileURI: any) {
-		console.log("julita " + fileURI)
 		let downloadUrl = fileURI;
 		let path = this.file.dataDirectory;
 		const transfer = this.ft.create();
@@ -82,10 +110,43 @@ export class PetprofilePage implements OnInit {
 	}
 	
 	
-	
+	async deleteMedicalHistory(idMedicalHistoryEntry: any, fileURI: any) {
+		const alert = await this.alertController.create({
+			header: 'Estas seguro que queres eliminar esta entrada?',
+			message: 'Esta accion no se podra deshacer',
+			buttons: [
+				{
+					text: 'No',
+					role: 'cancel',
+					cssClass: 'secondary',
+					handler: (blah) => {
+						
+					}
+				}, {
+					text: 'Si',
+					handler: () => {
+						
+
+						this.afs.doc(`medicalhistoryentries/${idMedicalHistoryEntry.$key}`).delete();
+						this.afStorage.storage.refFromURL(idMedicalHistoryEntry.fileUri).delete();
+						
+						
+						
+				
+					}
+				}
+			]
+		});
+
+		await alert.present();
+
+
+		
+	}
+
+
 
 	
-
 
 	isLoggedIn() {
 		return this.afAuth.authState.pipe(first()).toPromise();
@@ -124,6 +185,10 @@ export class PetprofilePage implements OnInit {
 		}
 
 
+	}
+
+	createCode() {
+		
 	}
 
 

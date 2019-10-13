@@ -1,9 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { PetService } from '../pet.service';
 import { AngularFirestore } from '@angular/fire/firestore'
 import { UserService } from '../user.service';
 import { IonicModule } from 'ionic-angular';
 import { Router } from '@angular/router';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { ModalController } from '@ionic/angular';
+import { ModalPage } from '../modal/modal.page';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
+
+
 
 @Component({
   selector: 'app-feed',
@@ -12,14 +20,40 @@ import { Router } from '@angular/router';
 })
 export class FeedPage implements OnInit {
 	userPets
+	userData
+	petID: any;
+	uidOwner: any;
+
+	isOn = false;
+	buttonText = 'Loading…';
+	loading = true;
+	options = {
+	formats: 'QR_CODE',
+	//prompt : “Place the code in the center of the square.”+ “\n”+ " It will be scanned automatically",
+	}
+
+	products: any[] = [];
+	selectedProduct: any;
+	productFound: boolean = false;
+	
 	constructor(
 		private pets: PetService,
-		public router: Router
+		public router: Router,
+		private qrScanner: QRScanner,
+		private _barcodeScanner: BarcodeScanner,
+		public modalController: ModalController,
+		public user:  UserService
+		
 		) {
 		
 		this.userPets = this.pets.getPetsList()
+
 		
-		}
+		
+
+	}
+
+
 
 
 
@@ -27,6 +61,8 @@ export class FeedPage implements OnInit {
 	  
 	  
   }
+
+
 
 	redirectPetPage(petid: any) {
 		this.router.navigate(['/petprofile/' + petid])
@@ -62,6 +98,89 @@ export class FeedPage implements OnInit {
 
 	  
   }
+
+	public scanQR() {
+		
+		this._barcodeScanner.scan(this.options).then((barcodeData) => {
+
+			if (barcodeData.cancelled) {
+				console.log("User cancelled the action!");
+				this.buttonText = "Scan";
+				this.loading = false;
+				return false;
+			}
+			console.log("Scanned successfully!");
+			console.log(barcodeData["text"]);
+			this.presentModal(barcodeData["text"]);
+			
+
+
+			
+
+		}, (err) => {
+			console.log(err);
+		});
+	}
+
+	readQR() {
+		let ionApp = document.getElementsByTagName('ion-app')[0];
+		this.qrScanner.prepare()
+			.then((status: QRScannerStatus) => {
+
+				if (status.authorized) {
+					// camera permission was granted
+					console.log("scanning")
+
+					// start scanning
+					let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+						console.log('Scanned something', text);
+
+						this.qrScanner.hide(); 
+						ionApp.style.display = 'block';// hide camera preview
+						scanSub.unsubscribe(); // stop scanning
+					});
+
+					// show camera preview
+					window.document.querySelector('ion-app').classList.add('transparentBody')
+					this.qrScanner.show();
+					ionApp.style.display = 'none';
+
+					// wait for user to scan something, then the observable callback will be called
+
+				} else if (status.denied) {
+					// camera permission was permanently denied
+					// you must use QRScanner.openSettings() method to guide the user to the settings page
+					// then they can grant the permission from there
+					ionApp.style.display = 'block';
+				} else {
+					// permission was denied, but not permanently. You can ask for permission again at a later time.
+					ionApp.style.display = 'block';
+				}
+			})
+			.catch((e: any) => { 
+				console.log('Error is', e); 
+				ionApp.style.display = 'block'; });
+	}
+
+	async presentModal(data: any) {
+		const modal = await this.modalController.create({
+			component: ModalPage,
+			componentProps: { data}
+		});
+
+		return await modal.present();
+
+		
+	}
+
+	dismiss() {
+		// using the injected ModalController this page
+		// can "dismiss" itself and optionally pass back data
+		this.modalController.dismiss({
+			'dismissed': true
+		});
+	}
+
 
 
 	

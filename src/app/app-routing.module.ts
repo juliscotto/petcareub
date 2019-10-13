@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'petprofile/:petId', loadChildren: './petprofile/petprofile.module#PetprofilePageModule' },
   { path: 'uploadmedicalhistory/:petId', loadChildren: './uploadmedicalhistory/uploadmedicalhistory.module#UploadmedicalhistoryPageModule' },
+  { path: 'modal', loadChildren: './modal/modal.module#ModalPageModule' },
 
 ];
 @NgModule({

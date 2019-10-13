@@ -34,7 +34,12 @@ import firebase from "@firebase/app";
 
 import "@firebase/auth";
 import "@firebase/firestore";
-
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { ModalController } from '@ionic/angular';
+import { ModalPageModule } from './modal/modal.module'
+import { Ng2TelInputModule } from 'ng2-tel-input';
 
 
 
@@ -50,7 +55,9 @@ import "@firebase/firestore";
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ModalPageModule,
+    Ng2TelInputModule
   ],
   providers: [
     StatusBar,
@@ -71,7 +78,12 @@ import "@firebase/firestore";
     FileTransfer,
     DocumentViewer,
     Platform,
-    AngularFireAuth
+    AngularFireAuth,
+    NgxQRCodeModule,
+    QRScanner,
+    BarcodeScanner,
+    ModalController
+    
 
 
   ],

@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>feed</ion-title>
+     <ion-buttons slot="primary">
+
+    <ion-button  (click)="scanQR()">
+    	read qr
+      <ion-icon size= "large"slot="start" name="qr-scanner"></ion-icon>
+
+    </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -13,12 +21,14 @@
 	    <ion-card-subtitle>{{pet.gender}}</ion-card-subtitle>
 	    <ion-card-subtitle>{{age(pet.birthday)}}</ion-card-subtitle>
 	  </ion-card-header>
-
 	  <ion-card-content>
 	    
 	  </ion-card-content>
 	</ion-card>
 
+
+
+	
 	
 
 </ion-content>

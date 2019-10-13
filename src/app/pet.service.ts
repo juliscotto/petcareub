@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core'
 import { AngularFireList } from '@angular/fire/database'
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore } from '@angular/fire/firestore'
-import { first, tap } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
+import { first, tap, flatMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
+import { map } from 'rxjs/operators';
+
+import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/mergeMap'
 
 interface pet {
 	namePet: string,
@@ -26,7 +30,13 @@ export class PetService {
 	userId: string
 	data: any;
 	petData
+	users: any;
+	itemspet: any;
+	datapet: any;
 
+	private itemsCollection: AngularFirestoreCollection<any>;
+	items: Observable<any[]>;
+	countItems = 0;
 
 	constructor(
 		public user: UserService, 
@@ -35,9 +45,15 @@ export class PetService {
 	}
 
 	getPetMedicalHistories(petID: any) {
-		const pets = this.afs.collection<any>("medicalhistoryentries", ref =>
+
+		this.itemsCollection = this.afs.collection<any>('medicalhistoryentries', ref =>
 			ref.where('petID', '==', petID))
-		this.petData = pets.valueChanges();
+		this.petData = this.itemsCollection.snapshotChanges()
+			.map(actions => {
+				this.countItems = actions.length;
+				return actions.map(action => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }));
+			});
+
 		return this.petData
 	}
 	
@@ -56,6 +72,22 @@ export class PetService {
 		return this.petData
 	}
 	
+
+	getPetuidOwner(petID: any) {
+		let resultID;
+		
+		this.itemspet = this.afs.collection<any>('pets', ref =>
+			ref.where('id', '==', petID))
+
+		this.datapet = this.itemspet.snapshotChanges()
+			.map(actions => {
+				this.countItems = actions.length;
+				return actions.map(action => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }));
+			});
+      
+		return this.datapet;
+		
+	}
 
 	
 

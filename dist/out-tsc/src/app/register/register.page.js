@@ -16,6 +16,8 @@ var RegisterPage = /** @class */ (function () {
         this.email = "";
         this.password = "";
         this.cpassword = "";
+        this.phoneNumberAreaCode = "";
+        this.phoneNumber = "";
         this.vetApproved = false;
         this.vetcertificate = "";
         this.message = "";
@@ -35,11 +37,11 @@ var RegisterPage = /** @class */ (function () {
     };
     RegisterPage.prototype.register = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, fullname, email, password, cpassword, vetApproved, vetcertificate, res, error_1;
+            var _a, fullname, email, phoneNumberAreaCode, phoneNumber, password, cpassword, vetApproved, vetcertificate, res, telephoneNumber, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = this, fullname = _a.fullname, email = _a.email, password = _a.password, cpassword = _a.cpassword, vetApproved = _a.vetApproved, vetcertificate = _a.vetcertificate;
+                        _a = this, fullname = _a.fullname, email = _a.email, phoneNumberAreaCode = _a.phoneNumberAreaCode, phoneNumber = _a.phoneNumber, password = _a.password, cpassword = _a.cpassword, vetApproved = _a.vetApproved, vetcertificate = _a.vetcertificate;
                         if (password !== cpassword) {
                             this.showAlert("Error", "Passwords don't match");
                             return [2 /*return*/, console.error("Passwords don't match!")];
@@ -51,15 +53,18 @@ var RegisterPage = /** @class */ (function () {
                     case 2:
                         res = _b.sent();
                         console.log(res);
+                        telephoneNumber = "+" + phoneNumberAreaCode + phoneNumber;
                         this.afstore.doc("users/" + res.user.uid).set({
                             fullname: fullname,
                             email: email,
+                            telephoneNumber: telephoneNumber,
                             vetApproved: vetApproved,
                             vetcertificate: vetcertificate
                         });
                         this.user.setUser({
                             fullname: fullname,
                             email: email,
+                            phoneNumber: telephoneNumber,
                             vetApproved: vetApproved,
                             vetcertificate: vetcertificate,
                             uid: res.user.uid
@@ -82,6 +87,9 @@ var RegisterPage = /** @class */ (function () {
                 }
             });
         });
+    };
+    RegisterPage.prototype.redirectLogin = function () {
+        this.router.navigate(['/login']);
     };
     RegisterPage.prototype.showAlert = function (header, message) {
         return __awaiter(this, void 0, void 0, function () {

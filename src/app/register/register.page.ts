@@ -21,6 +21,7 @@ export class RegisterPage implements OnInit {
 	email: string = ""
 	password: string = ""
 	cpassword: string = ""
+	phoneNumberAreaCode: string=""
 	phoneNumber: string = ""
 	vetApproved: boolean = false
 	vetcertificate:string = ""
@@ -56,7 +57,7 @@ export class RegisterPage implements OnInit {
   	}	
 	
 	async register(){
-		const { fullname, email, phoneNumber, password, cpassword, vetApproved, vetcertificate } = this
+		const { fullname, email, phoneNumberAreaCode, phoneNumber, password, cpassword, vetApproved, vetcertificate } = this
 
 		if(password !== cpassword) {
 			this.showAlert("Error", "Passwords don't match")
@@ -67,12 +68,12 @@ export class RegisterPage implements OnInit {
 			
 			const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
 			console.log(res)
-			
+			const telephoneNumber = "+" + phoneNumberAreaCode + phoneNumber;
 
 			this.afstore.doc(`users/${res.user.uid}`).set({
 				fullname,
 				email,
-				phoneNumber,
+				telephoneNumber,
 				vetApproved,
 				vetcertificate
 			})
@@ -80,7 +81,7 @@ export class RegisterPage implements OnInit {
 			this.user.setUser({
 					fullname,
 					email,
-					phoneNumber,
+					phoneNumber: telephoneNumber,
 					vetApproved,
 					vetcertificate,
 					uid: res.user.uid

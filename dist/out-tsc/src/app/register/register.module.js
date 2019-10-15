@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { IonicModule } from '@ionic/angular';
 import { RegisterPage } from './register.page';
+import { Ng2TelInputModule } from 'ng2-tel-input';
 var routes = [
     {
         path: '',
@@ -20,9 +22,13 @@ var RegisterPageModule = /** @class */ (function () {
                 CommonModule,
                 FormsModule,
                 IonicModule,
+                Ng2TelInputModule,
                 RouterModule.forChild(routes)
             ],
-            declarations: [RegisterPage]
+            declarations: [RegisterPage],
+            providers: [
+                AngularFireAuth
+            ]
         })
     ], RegisterPageModule);
     return RegisterPageModule;

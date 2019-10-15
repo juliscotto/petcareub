@@ -27,12 +27,17 @@
   		<ion-title  class="card-title" text-left>Datos del dueño de mascota</ion-title>
 	</ion-toolbar>
 
-	  <ion-card *ngIf= "userData | async as user"  >
+	  <ion-card *ngIf= "userOwnerData | async as user"  >
 		
 	  <ion-card-content>
 	  	<ion-card-title>{{user.fullname}}</ion-card-title>
-	    <ion-card-subtitle>{{user.email}}</ion-card-subtitle>
+	    <ion-card-subtitle>email : {{user.email}}</ion-card-subtitle>
+	     <ion-card-subtitle>telefono: {{user.telephoneNumber}}</ion-card-subtitle>
 	  </ion-card-content>
 	</ion-card>
+
+	<ion-list *ngIf= "userData | async as user">
+		<ion-button *ngIf= "user.vetApproved==true" (click)="addPetToVet()"> Agregar Paciente </ion-button>
+	</ion-list>
 
 </ion-content>

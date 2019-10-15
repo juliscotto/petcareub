@@ -36,13 +36,14 @@ export class PetprofilePage implements OnInit {
 	userPets
 	medicalHistories
 	petID: string = ""
-
+	vetApproved: boolean = false;
 	docID: string = ""
 	files: Observable<any[]>;
-
+	type: string = "mascota"
 	private itemsCollection: AngularFirestoreCollection<any>;
 	items: Observable<any[]>;
 	countItems = 0;
+	petData
 
 	qr_data: string = ""
 
@@ -71,20 +72,35 @@ export class PetprofilePage implements OnInit {
 	}
 
   ngOnInit() {
-	  this.route.params.subscribe(params =>
-		  this.petID = params.petId);
-	
+	this.route.params.subscribe(params => {
+	  	this.petID = params.petId; 
+		this.vetApproved = (params.vetApproved == "true");
 
-	  this.userPets = this.pets.getPet(this.petID)
+
+	});
+
+
+	if(this.vetApproved===true){
+		this.type = "paciente"
+	}
+
+	this.userPets = this.pets.getPetData(this.petID);
+
+	this.userPets.subscribe(async (pets) => {
+		this.petData = await pets
+		  
+	  })
+
+	
 
 	  
 
-	  this.medicalHistories = this.pets.getPetMedicalHistories(this.petID)
+	this.medicalHistories = this.pets.getPetMedicalHistories(this.petID);
 
-	  this.qr_data = this.petID;
+	this.qr_data = this.petID;
 
 
-	  this.created_code = this.qr_data;
+	this.created_code = this.qr_data;
 
 
   
@@ -128,7 +144,10 @@ export class PetprofilePage implements OnInit {
 						
 
 						this.afs.doc(`medicalhistoryentries/${idMedicalHistoryEntry.$key}`).delete();
-						this.afStorage.storage.refFromURL(idMedicalHistoryEntry.fileUri).delete();
+					
+						if (fileURI !="") {
+							this.afStorage.storage.refFromURL(idMedicalHistoryEntry.fileUri).delete();
+						}
 						
 						
 						
@@ -153,7 +172,7 @@ export class PetprofilePage implements OnInit {
 	}
 	redirectMedicalHistory() {
 		
-		this.router.navigate(['/uploadmedicalhistory/' + this.petID])
+		this.router.navigate(['/uploadmedicalhistory/' , this.petID,  this.vetApproved])
 	}
 
 	age(birthDay: any) {
@@ -187,10 +206,61 @@ export class PetprofilePage implements OnInit {
 
 	}
 
-	createCode() {
-		
+	async deletePet(){
+		var headerChanged: string = "";
+		if (this.type == "mascota") {
+		 headerChanged = "esta mascota?"
+		}else{
+			headerChanged = "este paciente?"
+		}
+		const alert = await this.alertController.create({
+
+			header: 'Estas seguro que queres eliminar ' + headerChanged,
+			message: 'Esta accion no se podra deshacer',
+			buttons: [
+				{
+					text: 'No',
+					role: 'cancel',
+					cssClass: 'secondary',
+					handler: (blah) => {
+
+					}
+				}, {
+					text: 'Si',
+					handler: () => {
+					
+
+						if (this.vetApproved===true) {
+							this.pets.updatePetVet("", this.petData[0]["id"]);
+							this.showAlert("Paciente eliminado!", "yay!")
+						}else{
+							this.afs.doc(`pets/${this.petData[0]["$key"]}`).delete();
+							this.pets.deleteAllMedialEntries(this.petData[0]["id"]);
+							this.showAlert("Mascota eliminado!", "yay!")
+						}
+
+						this.router.navigate(['/tabs']); 
+
+					}
+				}
+			]
+		});
+
+		await alert.present();
 	}
 
+	async showAlert(header: string, message: string) {
+		const alert = await this.alertController.create({
+			header,
+			message,
+			buttons: ["Ok"]
+		})
+
+		await alert.present()
+	}
+
+	
+	
 
 }
 

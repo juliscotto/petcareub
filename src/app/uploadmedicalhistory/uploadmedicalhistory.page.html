@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
   	<ion-buttons slot="start">
-      <ion-back-button text="cancelar"  color="danger" defaultHref="/petprofile/{{petID}}"></ion-back-button>
+      <ion-back-button text="cancelar"  color="danger" defaultHref="/petprofile/{{petID}}/{{vetApproved}}"></ion-back-button>
     </ion-buttons>
 
     <ion-title>agregar nueva entrada</ion-title>
@@ -11,8 +11,7 @@
 <ion-content>
 
 	<ion-list>
-
-    <ion-item>
+    <ion-item *ngIf="!vetApproved" >
         <ion-label>Nombre del Veterinario</ion-label>
         <ion-input type="text" [(ngModel)]="vetName">
         </ion-input>

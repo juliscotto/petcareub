@@ -10,6 +10,7 @@ var LoginPage = /** @class */ (function () {
         this.user = user;
         this.fullname = "";
         this.email = "";
+        this.phoneNumber = "";
         this.password = "";
         this.vetApproved = false;
         this.vetcertificate = "";
@@ -17,11 +18,11 @@ var LoginPage = /** @class */ (function () {
     LoginPage.prototype.ngOnInit = function () { };
     LoginPage.prototype.login = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, fullname, email, password, vetApproved, vetcertificate, res, err_1;
+            var _a, fullname, email, phoneNumber, password, vetApproved, vetcertificate, res, err_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = this, fullname = _a.fullname, email = _a.email, password = _a.password, vetApproved = _a.vetApproved, vetcertificate = _a.vetcertificate;
+                        _a = this, fullname = _a.fullname, email = _a.email, phoneNumber = _a.phoneNumber, password = _a.password, vetApproved = _a.vetApproved, vetcertificate = _a.vetcertificate;
                         _b.label = 1;
                     case 1:
                         _b.trys.push([1, 3, , 4]);
@@ -32,6 +33,7 @@ var LoginPage = /** @class */ (function () {
                             this.user.setUser({
                                 fullname: fullname,
                                 email: email,
+                                phoneNumber: phoneNumber,
                                 vetApproved: vetApproved,
                                 vetcertificate: vetcertificate,
                                 uid: res.user.uid

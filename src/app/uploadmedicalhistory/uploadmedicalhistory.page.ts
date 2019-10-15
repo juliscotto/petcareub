@@ -12,10 +12,14 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { AlertController } from '@ionic/angular'
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage'
 import { AngularFireDatabase } from '@angular/fire/database';
-import { map, filter, switchMap, finalize } from 'rxjs/operators';
+import { map, filter, switchMap, finalize, first } from 'rxjs/operators';
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable';
 import { Platform } from '@ionic/angular';
+import { UserService } from '../user.service';
+import 'rxjs/add/observable/of';
+import { AngularFireAuth } from '@angular/fire/auth'
+
 
 
 @Component({
@@ -26,12 +30,14 @@ import { Platform } from '@ionic/angular';
 export class UploadmedicalhistoryPage implements OnInit {
 	petID: string = ""
 	returnpath: string = "";
-
+	vetApproved:boolean = false;
 	vetName: string = "";
 	diagnosis: string = "";
 	comments: string = "";
 	fileUri: string = "";
 	id: string
+
+	userData
 
 	URLPublica: string
 	uploadPercent: Observable<number>;
@@ -50,15 +56,30 @@ export class UploadmedicalhistoryPage implements OnInit {
 		public alert: AlertController,
 		private afStorage: AngularFireStorage,
 		private db: AngularFireDatabase,
-		public platform: Platform
+		public platform: Platform,
+		public user: UserService,
+		public afAuth: AngularFireAuth
 
 		) {
+
+
+
+
+
 		 }
 
-  ngOnInit() {
-	  this.route.params.subscribe(params =>
-		  this.petID = params.petId);
-  }
+	async ngOnInit() {
+
+		this.route.params.subscribe(params => {
+			this.petID = params.petId;
+			this.vetApproved = (params.vetApproved == "true");
+			this.updateVetName()
+
+		});
+		
+	
+
+	}
 
 	
 
@@ -66,7 +87,9 @@ export class UploadmedicalhistoryPage implements OnInit {
 	upload() {
 
 		this.platform.ready().then(() => {
-			if (this.platform.is('android')) {
+			let platforms = this.platform.platforms();
+			if (this.platform.is('android') && !platforms.includes("mobileweb")) {
+			
 				this.fileChooser.open().then((uri) => {
 					alert(uri);
 
@@ -85,7 +108,8 @@ export class UploadmedicalhistoryPage implements OnInit {
 				});
 
 
-			} else if (this.platform.is('ios')) {
+			} else if (this.platform.is('ios') && !platforms.includes("mobileweb")) {
+				console.log(platforms)
 				this.filePicker.pickFile()
 					.then(uri => { 
 						alert(uri);
@@ -102,7 +126,8 @@ export class UploadmedicalhistoryPage implements OnInit {
 								
 					
 			} else {
-				alert("Esta funcion, por el momento, solo esta disponible para aplicacion mobil")
+				
+				alert("Esta funcion, por el momento, solo esta disponible para aplicacion movil")
 			}
 			
 		});
@@ -140,9 +165,9 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 	
 	async addNewMedicalEntry() {
-
-	
 		const { vetName, diagnosis, comments, petID, fileUri, id } = this
+
+
 		try {
 
 
@@ -170,10 +195,9 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 
 			this.showAlert("Success!", "Entrada guardada")
-			this.router.navigate(['/petprofile/' + this.petID])	
+			this.router.navigate(['/petprofile/', this.petID, this.vetApproved])	
 
-
-
+			
 
 		} catch (error) {
 			console.dir(error)
@@ -191,6 +215,34 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 		await alert.present()
 	}
+
+	async getUserData() {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+
+		const itemsCollection = this.afstore.collection<any>('users').doc(user.uid)
+		const userdata = itemsCollection.snapshotChanges().pipe(
+			map(actions => {
+				return ({ $key: actions.payload.id, ...actions.payload.data() });
+			}));
+
+		
+		
+		return userdata;
+	}
+
+	async updateVetName(){
+		if (this.vetApproved===true) {
+			this.userData = await this.getUserData()
+
+			this.userData.subscribe(async (data) => {
+				await data;
+				this.vetName = await data['fullname']
+			});
+
+		}
+	}
+
+	
 
 	 
  }

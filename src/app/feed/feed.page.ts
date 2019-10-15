@@ -10,17 +10,24 @@ import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { IonicPageModule } from 'ionic-angular';
 
+import { IonicPage } from 'ionic-angular';
 
-
+@IonicPage()
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
 })
+
 export class FeedPage implements OnInit {
 	userPets
 	userData
+	userID
+	vetApproved ;
 	petID: any;
 	uidOwner: any;
 
@@ -34,7 +41,7 @@ export class FeedPage implements OnInit {
 
 	products: any[] = [];
 	selectedProduct: any;
-	productFound: boolean = false;
+	pageTitle = "";
 	
 	constructor(
 		private pets: PetService,
@@ -42,11 +49,13 @@ export class FeedPage implements OnInit {
 		private qrScanner: QRScanner,
 		private _barcodeScanner: BarcodeScanner,
 		public modalController: ModalController,
-		public user:  UserService
-		
+		public user:  UserService,
+		public afAuth: AngularFireAuth,
+		public afs: AngularFirestore
+
 		) {
+
 		
-		this.userPets = this.pets.getPetsList()
 
 		
 		
@@ -59,13 +68,14 @@ export class FeedPage implements OnInit {
 
   ngOnInit() {
 	  
+	  this.getUserData()
+
+	 
 	  
   }
 
-
-
 	redirectPetPage(petid: any) {
-		this.router.navigate(['/petprofile/' + petid])
+		this.router.navigate(['/petprofile/' , petid , this.vetApproved])
 	}
   
   age(birthDay: any){
@@ -99,7 +109,7 @@ export class FeedPage implements OnInit {
 	  
   }
 
-	public scanQR() {
+	 public scanQR() {
 		
 		this._barcodeScanner.scan(this.options).then((barcodeData) => {
 
@@ -181,7 +191,38 @@ export class FeedPage implements OnInit {
 		});
 	}
 
+	isLoggedIn() {
+		return this.afAuth.authState.pipe(first()).toPromise();
+	}
 
+
+	async getUserData() {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+		this.userID = user.uid
+		this.userData = this.user.getUser(user.uid)
+
+		this.afs.collection<any>('users').doc(user.uid).snapshotChanges().pipe(
+			map(actions => {
+				const vetApproved = actions.payload.get('vetApproved');
+				return vetApproved;
+			})
+		).subscribe((data) => {
+			this.vetApproved = data;
+			
+			if (!this.vetApproved) {
+				this.userPets = this.pets.getPetsList()
+				this.pageTitle = "Mascotas"
+			} else {
+				this.userPets = this.pets.getVetPetsList()
+				this.pageTitle = "Pacientes"
+			}
+			
+		});
+
+
+	}
+
+	
 
 	
 }

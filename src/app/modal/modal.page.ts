@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, ModalController, NavParams } from '@ionic/angular';
 import { PetService } from '../pet.service';
 import { UserService } from '../user.service';
+import { first } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AlertController } from '@ionic/angular'
 
 @Component({
 	selector: 'modal',
@@ -12,6 +15,8 @@ export class ModalPage implements OnInit {
 
 	userPets
 	userData
+	userID
+	userOwnerData
 	petID: any;
 	uidOwner: any;
 	uidOwnerResult: any;
@@ -21,26 +26,30 @@ export class ModalPage implements OnInit {
 	 	private modalCtrl: ModalController,
 		public navParams: NavParams,
 		public user: UserService,
-		public pets: PetService) {
+		public pets: PetService,
+		public afAuth: AngularFireAuth,
+		public alert: AlertController
+		) {
 		this.petID = navParams.get('data')
+
 		}
 
 	ngOnInit() {
 		this.userPets = this.pets.getPet(this.petID)
 
 		console.log(this.petID)
-		this.pets.getPetuidOwner(this.petID).subscribe((pets) => {
+		this.pets.getPetData(this.petID).subscribe((pets) => {
 			const uid: Array<string> = pets.reduce((prevValue, pet) => {
 				return pet.uidOwner;
 			}, []);
 			console.log(uid)
 			this.uidOwner = uid;
-			this.userData = this.user.getUser(this.uidOwner)
-			console.log(this.userData)
+			this.userOwnerData = this.user.getUser(this.uidOwner)
+			console.log(this.userOwnerData)
 		})
 
 		
-
+		this.getUserData()
 		
 	}
 
@@ -77,6 +86,28 @@ export class ModalPage implements OnInit {
 		}
 
 
+	}
+
+	async getUserData() {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+		this.userID = user.uid
+		this.userData = this.user.getUser(user.uid)
+	}
+
+	addPetToVet(){
+		this.pets.updatePetVet(this.userID, this.petID);
+		this.showAlert("ok!", "Mascota guardada")
+		
+	}
+
+	async showAlert(header: string, message: string) {
+		const alert = await this.alert.create({
+			header,
+			message,
+			buttons: ["Ok"]
+		})
+
+		await alert.present()
 	}
 
 }

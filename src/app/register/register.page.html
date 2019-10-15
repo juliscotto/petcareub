@@ -33,8 +33,12 @@
     </ion-item>
 
     <ion-item>
-      <ion-label >Telefono</ion-label>
-      <ion-input type="phone" pattern="[0-9]*" [(ngModel)]="phoneNumber">
+      <ion-label class="areaCode">Cod. Pais</ion-label>
+       <ion-label > +</ion-label>
+      <ion-input type="tel" pattern="[0-9]*" onKeyPress="if(this.value.length==3) return false;" [(ngModel)]="phoneNumberAreaCode" class="set-width" >
+      </ion-input>
+      <ion-label class="telephone">Telefono</ion-label>
+      <ion-input type="tel" pattern="[0-9]*" onKeyPress="if(this.value.length==12) return false;"  [(ngModel)]="phoneNumber">
       </ion-input>
     </ion-item>
 

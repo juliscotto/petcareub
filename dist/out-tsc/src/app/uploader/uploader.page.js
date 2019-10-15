@@ -30,6 +30,7 @@ var UploaderPage = /** @class */ (function () {
         this.birthday = "";
         this.id = "";
         this.uidOwner = "";
+        this.idVet = "";
         this.otherType = "";
     }
     UploaderPage.prototype.selection = function (name) {
@@ -51,7 +52,7 @@ var UploaderPage = /** @class */ (function () {
     };
     UploaderPage.prototype.registerPet = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, namePet, gender, type, breed, birthday, id, uidOwner, user;
+            var _a, namePet, gender, type, breed, birthday, id, uidOwner, idVet, user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -61,7 +62,7 @@ var UploaderPage = /** @class */ (function () {
                         else {
                             this.type = this.type;
                         }
-                        _a = this, namePet = _a.namePet, gender = _a.gender, type = _a.type, breed = _a.breed, birthday = _a.birthday, id = _a.id, uidOwner = _a.uidOwner;
+                        _a = this, namePet = _a.namePet, gender = _a.gender, type = _a.type, breed = _a.breed, birthday = _a.birthday, id = _a.id, uidOwner = _a.uidOwner, idVet = _a.idVet;
                         return [4 /*yield*/, this.isLoggedIn()];
                     case 1:
                         user = _b.sent();
@@ -73,6 +74,7 @@ var UploaderPage = /** @class */ (function () {
                                 breed: breed,
                                 birthday: birthday,
                                 uidOwner: user.uid,
+                                idVet: idVet,
                                 id: this.afstore.createId()
                             });
                             this.pet.setPet({
@@ -82,6 +84,7 @@ var UploaderPage = /** @class */ (function () {
                                 breed: breed,
                                 birthday: birthday,
                                 uidOwner: uidOwner,
+                                idVet: idVet,
                                 id: id
                             });
                             this.showAlert("Success!", "Mascota guardada");

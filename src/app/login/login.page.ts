@@ -3,6 +3,8 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { AppRoutingPreloaderService } from '../AppRoutingPreloaderService.page';
+
 
 @Component({
   selector: 'app-login',
@@ -21,10 +23,16 @@ export class LoginPage implements OnInit {
 	constructor(
 		public afAuth: AngularFireAuth, 
 		public router: Router,
-		public user: UserService	
+		public user: UserService,
+		private routingService: AppRoutingPreloaderService,	
 		)
-		{ }
-	ngOnInit() { }
+
+		{ 
+			this.feedPreLoad()
+		}
+	ngOnInit() { 
+
+	}
 
 	async login() {
 		const { fullname, email, phoneNumber, password, vetApproved, vetcertificate } = this
@@ -48,4 +56,7 @@ export class LoginPage implements OnInit {
 		}
 	}
 
+	async feedPreLoad() {
+		await this.routingService.preloadRoute('feed');
+	}
 }

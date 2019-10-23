@@ -2,7 +2,7 @@ import { Injectable, Pipe } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
 import { first, map } from 'rxjs/operators';
-
+import { AlertController } from '@ionic/angular'
 
 interface user {
 	fullname: string,
@@ -21,7 +21,8 @@ export class UserService {
 	private itemsCollection: AngularFirestoreCollection<any>;
 	constructor(
 		private afAuth: AngularFireAuth,
-		public afs: AngularFirestore) {
+		public afs: AngularFirestore,
+		public alert: AlertController) {
 
 	}
 
@@ -68,6 +69,7 @@ export class UserService {
 
 	async getUserData() {
 		const user = await this.afAuth.authState.pipe(first()).toPromise();
+
 		this.userData = this.getUser(user.uid)
 
 		const itemsCollection = this.afs.collection<any>('users').doc(user.uid)
@@ -77,6 +79,47 @@ export class UserService {
 			}));
 
 		return userdata;
+	}
+
+	async updateUser(_fullname: string, _email: string, _telephoneNumber: string, _vetcertificate: string, password: string) {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+
+
+		if (user.email !== _email) {
+			user.updateEmail(_email).then(function() {
+				console.log("email updated")
+				user.sendEmailVerification();
+			}).catch(function(error) {
+				console.log(error)
+			});
+		}
+
+		if (password) {
+			if (password !== null && password !== '') {
+				user.updatePassword(password).then(function() {
+					console.log("password updated")
+				}).catch(function(error) {
+					console.log(error)
+				});
+			}
+		}
+
+
+		this.afs.doc(`users/${user.uid}`).update({ fullname: _fullname, email: _email, telephoneNumber: _telephoneNumber, 
+			vetcertificate: _vetcertificate
+		});
+		this.showAlert("Cambios Guardados", "yay!");
+
+	}
+
+	async showAlert(header: string, message: string) {
+		const alert = await this.alert.create({
+			header,
+			message,
+			buttons: ["Ok"]
+		})
+
+		await alert.present()
 	}
 
 

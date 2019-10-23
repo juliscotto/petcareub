@@ -1,9 +1,83 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>profile</ion-title>
+    <ion-title>Mi Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+	<ion-list>
+
+    <ion-item>
+        <ion-label class="item-input-disabled" >Full Name</ion-label>
+        <ion-input class="input-disabled"  *ngIf="!isEditing" type="text" [(ngModel)]="fullname"></ion-input>
+        <ion-input  disabled="true" class="item-input-disabled"  *ngIf="isEditing" type="text" [(ngModel)]="fullname" ></ion-input>
+
+       
+    </ion-item>
+
+    <ion-item>
+        <ion-label class="item-input-disabled">Email Address</ion-label>
+        <ion-input class="input-disabled"  *ngIf="!isEditing" type="text" [(ngModel)]="email"></ion-input>
+        <ion-input  disabled="true" class="item-input-disabled"  *ngIf="isEditing" type="text" [(ngModel)]="email" ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="item-input-disabled">Password</ion-label>
+      <ion-input class="input-disabled"  *ngIf="!isEditing" type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="item-input-disabled">Confirm Password</ion-label>
+      <ion-input class="input-disabled"  *ngIf="!isEditing" type="password" [(ngModel)]="cpassword"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class="areaCode item-input-disabled">Cod. Pais</ion-label>
+       <ion-label class="item-input-disabled"> +</ion-label>
+      <ion-input  *ngIf="!isEditing" type="tel" pattern="[0-9]*" onKeyPress="if(this.value.length==3) return false;" [(ngModel)]="phoneNumberAreaCode" 
+      class="set-width input-disabled" >
+      </ion-input>
+       <ion-input  *ngIf="isEditing" disabled="true" type="tel" pattern="[0-9]*" onKeyPress="if(this.value.length==3) return false;" 
+       [(ngModel)]="phoneNumberAreaCode" class="set-width item-input-disabled" >
+      </ion-input>
+
+      <ion-label class="telephone item-input-disabled">Telefono</ion-label>
+      <ion-input *ngIf="!isEditing" type="tel" pattern="[0-9]*" class="input-disabled" onKeyPress="if(this.value.length==12) return false;"  
+      [(ngModel)]="phoneNumber">
+      </ion-input>
+       <ion-input *ngIf="isEditing" disabled="true" type="tel" pattern="[0-9]*" class="input-disabled" onKeyPress="if(this.value.length==12) return false;"  
+      [(ngModel)]="phoneNumber">
+      </ion-input>
+    </ion-item>
+
+    <ion-card class="ion-card">
+		<ion-item class="ion-checkbox-vet" (click)="ifVetAlert()">
+			<ion-label >Soy veterinario/a </ion-label>
+			<ion-checkbox [disabled]="vetApproved" (click)="addValue($event)" [(ngModel)]="checked">
+			</ion-checkbox>
+		</ion-item>
+	</ion-card>
+
+	<ion-item *ngIf="hide" (click)="ifVetAlert()">
+		<ion-label class="item-input-disabled" disabled="checked">Matricula</ion-label>
+    	<ion-input  [disabled]="vetApproved" class="item-input-disabled"  type="text" [(ngModel)]="vetcertificate" ></ion-input>
+	</ion-item>
+
+  </ion-list>
+
+  <ion-button fill="solid" expand="block" color="dark" (click)="editProfile()">{{editMessage}}</ion-button>
+  <ion-button fill="solid" expand="block" color="success" *ngIf="!isEditing" (click)="saveChanges()">Guardar Cambios</ion-button>
+
+  <ion-item-divider>
+  </ion-item-divider>
+  <div class="ion-text-center">
+        <h3></h3>
+  </div>
+
+  <ion-button fill="solid" expand="block" color="primary" (click)="prueba()">Cerrar Sesion</ion-button>
+  <ion-button fill="solid" expand="block" color="danger" (click)="register()">Eliminar Cuenta</ion-button>
+
+
 
 </ion-content>

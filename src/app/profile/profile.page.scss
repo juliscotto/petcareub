@@ -1,0 +1,32 @@
+.item-input-disabled{
+  opacity: 1 !important;
+  color: black !important;
+}
+
+ion-input:disabled, ion-input[disabled]{
+    color: black !important;
+    opacity: 1 !important;
+}
+
+.ion-checkbox-vet:disabled, .ion-checkbox-vet[disabled]{
+	color: black !important;
+    opacity: 1 !important;
+}
+
+.input-disabled{
+  opacity: 0.4;
+  color: black;
+}
+
+.areaCode{
+  font-size: 12px;
+}
+
+.set-width {
+	max-width: 40px; 
+	
+}
+
+.telephone{
+	font-size: 15px;
+}

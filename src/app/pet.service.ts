@@ -150,6 +150,14 @@ export class PetService {
 
 	}
 
+	updatePetData(id: string, namePet: string, gender: string, type: string, breed: string, birthday: string) {
+
+		this.afs.doc(`pets/${id}`).update({ namePet: namePet, gender: gender, 
+			type: type, breed: breed, birthday: birthday });
+	}
+
+	
+
 
 
 }

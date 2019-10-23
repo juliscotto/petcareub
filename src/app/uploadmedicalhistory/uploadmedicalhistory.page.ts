@@ -88,7 +88,7 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 		this.platform.ready().then(() => {
 			let platforms = this.platform.platforms();
-			if (this.platform.is('android') && !platforms.includes("mobileweb")) {
+			if (this.platform.is('android') ) {
 			
 				this.fileChooser.open().then((uri) => {
 					alert(uri);
@@ -108,7 +108,7 @@ export class UploadmedicalhistoryPage implements OnInit {
 				});
 
 
-			} else if (this.platform.is('ios') && !platforms.includes("mobileweb")) {
+			} else if (this.platform.is('ios') ) {
 				console.log(platforms)
 				this.filePicker.pickFile()
 					.then(uri => { 
@@ -144,10 +144,14 @@ export class UploadmedicalhistoryPage implements OnInit {
 
 		// observe percentage changes
 		this.uploadPercent = uploadTask.percentageChanges();
-		// get notified when the download URL is available
+
 		uploadTask.snapshotChanges().pipe(
 			finalize(() =>  fileRef.getDownloadURL().subscribe(
-				(value => this.fileUri = value)))
+				(value => { 
+					console.log(value)
+					this.fileUri = value;
+					console.log("fileUIR: " + this.fileUri)
+				})))
 		)
 			.subscribe()
 

@@ -10,6 +10,7 @@ const routes: Routes = [
 	{ path: 'petprofile/:petId/:vetApproved', loadChildren: './petprofile/petprofile.module#PetprofilePageModule' },
 	{ path: 'uploadmedicalhistory/:petId/:vetApproved', loadChildren: './uploadmedicalhistory/uploadmedicalhistory.module#UploadmedicalhistoryPageModule' },
 	{ path: 'modal', loadChildren: './modal/modal.module#ModalPageModule' },
+  	{ path: 'editpet/:petID', loadChildren: './editpet/editpet.module#EditpetPageModule' },
 
 ];
 @NgModule({

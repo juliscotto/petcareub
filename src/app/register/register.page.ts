@@ -68,7 +68,7 @@ export class RegisterPage implements OnInit {
 			
 			const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
 			console.log(res)
-			const telephoneNumber = "+" + phoneNumberAreaCode + phoneNumber;
+			const telephoneNumber = "+" + phoneNumberAreaCode +"-"+ phoneNumber;
 
 			this.afstore.doc(`users/${res.user.uid}`).set({
 				fullname,

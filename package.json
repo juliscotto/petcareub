@@ -30,7 +30,7 @@
     "@ionic-native/document-viewer": "^5.0.0",
     "@ionic-native/file": "^5.13.0",
     "@ionic-native/file-chooser": "^5.13.0",
-    "@ionic-native/file-opener": "^5.0.0",
+    "@ionic-native/file-opener": "^5.15.0",
     "@ionic-native/file-path": "^5.15.0",
     "@ionic-native/file-picker": "^5.13.0",
     "@ionic-native/file-transfer": "^5.0.0",

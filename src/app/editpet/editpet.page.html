@@ -1,12 +1,14 @@
 <ion-header>
-  <ion-toolbar >
-    <ion-title>Registrar Mascota</ion-title>
+  <ion-toolbar>
+  	<ion-buttons slot="start">
+      <ion-back-button  text="Mascota"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar Mascota</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
+	<ion-list>
 
     <ion-item>
         <ion-label>Nombre</ion-label>
@@ -17,10 +19,11 @@
 	<ion-card class="ion-card">
 		<ion-item *ngFor="let gender of genders; let i = index" >
 			<ion-label >{{gender.name}}</ion-label>
-			<ion-checkbox [(ngModel)]="gender.selected"
-        [disabled]="genders[i].value" 
+			<ion-checkbox [(ngModel)]="gender.value"
+        
         (click)="selection(gender.name);"
-         >
+
+        >
 			</ion-checkbox>
 		</ion-item>
 	</ion-card>
@@ -45,7 +48,7 @@
   	</ion-item>
 
 	<ion-item *ngIf="hide" >
-		<ion-label>Escriba el tipo de mascota</ion-label>
+		<ion-label>tipo de mascota</ion-label>
 	        	<ion-input type="text" [(ngModel)]="otherType">
 	        	</ion-input>
 	</ion-item>
@@ -67,7 +70,6 @@
 
   </ion-list>
 
-  <ion-button fill="solid" expand="block" color="dark" (click)="registerPet()">Agregar Mascota</ion-button>
+  <ion-button fill="solid" expand="block" color="dark" (click)="saveChanges()">Guardar Cambios</ion-button>
 
 </ion-content>
-

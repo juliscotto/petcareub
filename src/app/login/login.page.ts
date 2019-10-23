@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { AppRoutingPreloaderService } from '../AppRoutingPreloaderService.page';
-
+import { AlertController } from '@ionic/angular'
 
 @Component({
   selector: 'app-login',
@@ -24,7 +24,8 @@ export class LoginPage implements OnInit {
 		public afAuth: AngularFireAuth, 
 		public router: Router,
 		public user: UserService,
-		private routingService: AppRoutingPreloaderService,	
+		private routingService: AppRoutingPreloaderService,
+		public alert: AlertController	
 		)
 
 		{ 
@@ -41,22 +42,36 @@ export class LoginPage implements OnInit {
 		
 
 			if(res.user) {
-				this.user.setUser({
-					fullname,
-					email,
-					phoneNumber,
-					vetApproved,
-					vetcertificate,
-					uid: res.user.uid
-				})
-				this.router.navigate(['/tabs'])
+				//if (res.user.emailVerified) {
+					this.user.setUser({
+						fullname,
+						email,
+						phoneNumber,
+						vetApproved,
+						vetcertificate,
+						uid: res.user.uid
+					})
+					this.router.navigate(['/tabs'])
+				/*}else{
+					this.showAlert("Email no verificado", "Por favor, ingrese a su email para verifiar la cuenta");
+				}*/
 			}
 		} catch(err) {
-			console.dir(err)
+			this.showAlert("error", err)
 		}
 	}
 
 	async feedPreLoad() {
 		await this.routingService.preloadRoute('feed');
+	}
+
+	async showAlert(header: string, message: string) {
+		const alert = await this.alert.create({
+			header,
+			message,
+			buttons: ["Ok"]
+		})
+
+		await alert.present()
 	}
 }

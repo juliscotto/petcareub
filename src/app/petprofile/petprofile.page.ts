@@ -116,7 +116,8 @@ export class PetprofilePage implements OnInit {
 			let url = entry.toURL();
 
 			if (this.platform.is('ios')) {
-				this.document.viewDocument(url, 'application/pdf', {});
+				console.log("urlLog " + url)
+				this.fileOpener.open(url, 'application/pdf')
 			} else {
 				this.fileOpener.open(url, 'application/pdf')
 					.then(() => console.log('File is opened'))
@@ -249,6 +250,10 @@ export class PetprofilePage implements OnInit {
 		await alert.present();
 	}
 
+	redirectEditPet(){
+		this.router.navigate(['/editpet/', this.petID])
+	}
+
 	async showAlert(header: string, message: string) {
 		const alert = await this.alertController.create({
 			header,
@@ -257,6 +262,10 @@ export class PetprofilePage implements OnInit {
 		})
 
 		await alert.present()
+	}
+
+	saveChanges(){
+		
 	}
 
 	

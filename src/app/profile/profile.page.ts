@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
+import { PetService } from '../pet.service';
 import { AngularFireAuth } from '@angular/fire/auth'
 import { first, map } from 'rxjs/operators';
 import { AlertController } from '@ionic/angular'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -30,7 +32,9 @@ export class ProfilePage implements OnInit {
 	constructor(
 		public user: UserService ,
 		private afAuth: AngularFireAuth,
-		public alert: AlertController
+		public alert: AlertController,
+		public router: Router,
+		public pet: PetService
 		) { }
 
 	async ngOnInit() {
@@ -133,10 +137,9 @@ export class ProfilePage implements OnInit {
 		this.editProfile();
 	}
 
-	async prueba() {
-		const user = await this.afAuth.authState.pipe(first()).toPromise();
-
-		console.log(user.emailVerified)
+	async logOut() {
+		this.user.logout();
+		this.router.navigate(['/login'])
 	}
 
 	ifVetAlert(){
@@ -145,6 +148,37 @@ export class ProfilePage implements OnInit {
 				this.showAlert("Alerta", "si deasea cambiar su matricula u otra consulta, contacte admins")
 			}
 		}
+	}
+
+	async deleteAccount(){
+		const alert = await this.alert.create({
+
+			header: 'Estas seguro que quiere eliminar su cuenta? ' ,
+			message: 'Esta accion no se podra deshacer, y se eliminara todas sus mascotas',
+			buttons: [
+				{
+					text: 'No',
+					role: 'cancel',
+					cssClass: 'secondary',
+					handler: (blah) => {
+
+					}
+				}, {
+					text: 'Si',
+					handler: () => {
+						this.pet.deleteAllPetsCurrentUser();
+						this.user.deleteUser();
+						this.showAlert("Cuenta eliminada", "su cuenta ha sido eliminada con exito")
+						this.router.navigate(['/register']);
+
+					}
+				}
+			]
+		});
+
+		await alert.present();
+		
+
 	}
 
 	async showAlert(header: string, message: string) {

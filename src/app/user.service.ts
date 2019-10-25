@@ -122,6 +122,20 @@ export class UserService {
 		await alert.present()
 	}
 
+	async logout(): Promise<any> {
+		return this.afAuth.auth.signOut();
+	}
+
+	async deleteUser() {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+		
+		this.afs.collection<any>('users').doc(user.uid).delete();
+
+		user.delete();
+
+
+
+	}
 
 
 }

@@ -65,6 +65,10 @@ export class LoginPage implements OnInit {
 		await this.routingService.preloadRoute('feed');
 	}
 
+	goRegister(){
+		this.router.navigate(['/register'])
+	}
+
 	async showAlert(header: string, message: string) {
 		const alert = await this.alert.create({
 			header,

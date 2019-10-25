@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core'
 import { AngularFireList } from '@angular/fire/database'
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore'
 import { first, tap, flatMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { map } from 'rxjs/operators';
-
+import { AngularFireAuth } from '@angular/fire/auth'
 
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
@@ -42,7 +41,8 @@ export class PetService {
 
 	constructor(
 		public user: UserService, 
-		public afs: AngularFirestore
+		public afs: AngularFirestore,
+		public afAuth: AngularFireAuth
 		) {
 	
 	}
@@ -154,6 +154,26 @@ export class PetService {
 
 		this.afs.doc(`pets/${id}`).update({ namePet: namePet, gender: gender, 
 			type: type, breed: breed, birthday: birthday });
+	}
+
+	async deleteAllPetsCurrentUser() {
+		const user = await this.afAuth.authState.pipe(first()).toPromise();
+
+		let doc = this.afs.collection<any>('pets', ref => ref.where('uidOwner', '==', user.uid));
+		doc.snapshotChanges().pipe(
+			map(actions => actions.map(a => {
+				const data = a.payload.doc.data();
+				const iddoc = a.payload.doc.id;
+				return { iddoc, ...data };
+			}))).subscribe((pets) => {
+				const id: Array<string> = pets.reduce((prevValue, pet) => {
+					this.afs.doc(`pets/${pet.iddoc}`).delete();
+				}, []);
+
+
+			})
+
+
 	}
 
 	

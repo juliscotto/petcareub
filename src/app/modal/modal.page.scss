@@ -4,3 +4,16 @@
     padding-inline-start: 0;
     margin-left: 20px;
 }
+
+.item-avatar  {     
+width:100% !important;  
+height : 100% !important;  
+height : 100px !important;  
+max-width: 100px !important;  //any size
+max-height: 100px !important; //any size 
+}
+
+ion-card-header {
+	
+    padding-bottom: 0px !important;
+}

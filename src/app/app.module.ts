@@ -21,7 +21,6 @@ import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { MedicalHistory } from './medicalhistory.service';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage'
-
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer/ngx';
@@ -37,10 +36,10 @@ import "@firebase/firestore";
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ActionSheetController } from '@ionic/angular';
 import { ModalPageModule } from './modal/modal.module'
 import { Ng2TelInputModule } from 'ng2-tel-input';
-
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 
 @NgModule({
@@ -58,8 +57,8 @@ import { Ng2TelInputModule } from 'ng2-tel-input';
     AngularFireAuthModule,
     ModalPageModule,
     Ng2TelInputModule
-  ],
-  providers: [
+    ],
+    providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -82,7 +81,9 @@ import { Ng2TelInputModule } from 'ng2-tel-input';
     NgxQRCodeModule,
     QRScanner,
     BarcodeScanner,
-    ModalController
+    ModalController,
+    ActionSheetController,
+    Camera
     
 
 

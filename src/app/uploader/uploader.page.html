@@ -67,7 +67,12 @@
 
   </ion-list>
 
-  <ion-button fill="solid" expand="block" color="dark" (click)="registerPet()">Agregar Mascota</ion-button>
+  <ion-avatar   (click)="openeditprofile()" class="item-avatar " >
+      <img src="{{ imgSrc }}" alt="subir imagen" >
+    </ion-avatar>
+
+<span style="display:inline-block; width: 10px;"></span>
+  <ion-button  [disabled]="disableWait" fill="solid" expand="block" color="dark" (click)="registerPet()">Agregar Mascota</ion-button>
 
 </ion-content>
 

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { UserService } from './user.service';
 import { map } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage'
 
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
@@ -19,6 +20,7 @@ interface pet {
 	uidOwner: string,
 	idVet : string,
 	id: string,
+	pictureUri: string
 
 }
 
@@ -34,6 +36,7 @@ export class PetService {
 	users: any;
 	itemspet: any;
 	datapet: any;
+	pictureUri: string;
 
 	private itemsCollection: AngularFirestoreCollection<any>;
 	items: Observable<any[]>;
@@ -42,7 +45,8 @@ export class PetService {
 	constructor(
 		public user: UserService, 
 		public afs: AngularFirestore,
-		public afAuth: AngularFireAuth
+		public afAuth: AngularFireAuth,
+		public afStorage:AngularFireStorage
 		) {
 	
 	}
@@ -142,6 +146,8 @@ export class PetService {
 			}))).subscribe((pets) => {
 				const id: Array<string> = pets.reduce((prevValue, pet) => {
 					this.afs.doc(`medicalhistoryentries/${pet.iddoc}`).delete(); 
+					this.afStorage.storage.refFromURL(pet.fileUri).delete();
+					
 				}, []);
 				
 
@@ -149,6 +155,8 @@ export class PetService {
 
 
 	}
+
+	
 
 	updatePetData(id: string, namePet: string, gender: string, type: string, breed: string, birthday: string) {
 
@@ -168,6 +176,10 @@ export class PetService {
 			}))).subscribe((pets) => {
 				const id: Array<string> = pets.reduce((prevValue, pet) => {
 					this.afs.doc(`pets/${pet.iddoc}`).delete();
+					this.deleteAllMedialEntries(pet.id);
+					if (pet.pictureUri != "") {
+						this.afStorage.storage.refFromURL(pet.pictureUri).delete();
+					}
 				}, []);
 
 

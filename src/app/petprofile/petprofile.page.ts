@@ -237,6 +237,9 @@ export class PetprofilePage implements OnInit {
 						}else{
 							this.afs.doc(`pets/${this.petData[0]["$key"]}`).delete();
 							this.pets.deleteAllMedialEntries(this.petData[0]["id"]);
+							if (this.petData[0]["pictureUri"] != "") {
+								this.afStorage.storage.refFromURL(this.petData[0]["pictureUri"]).delete();
+							}
 							this.showAlert("Mascota eliminado!", "yay!")
 						}
 

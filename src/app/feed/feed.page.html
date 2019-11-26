@@ -15,15 +15,20 @@
 <ion-content padding>
 
 
-	<ion-card class="petname" *ngFor= "let pet of (userPets | async)"  >
-	  <ion-card-header (click)="redirectPetPage(pet.id)">
+	<ion-card (click)="redirectPetPage(pet.id)"  class="petname" *ngFor= "let pet of (userPets | async)"  >
+	  <ion-card-header style="float: right; ">
+	  	 <ion-avatar *ngIf="pet.pictureUri" class="item-avatar ">
+		  <img src="{{ pet.pictureUri }}">
+		</ion-avatar>
+	  	 </ion-card-header>
+	    
+	 
+	 
+	  <ion-card-content>
 	    <ion-card-title>{{pet.namePet}}</ion-card-title>
 	    <ion-card-subtitle>{{pet.type}}</ion-card-subtitle>
 	    <ion-card-subtitle>{{pet.gender}}</ion-card-subtitle>
 	    <ion-card-subtitle>{{age(pet.birthday)}}</ion-card-subtitle>
-	  </ion-card-header>
-	  <ion-card-content>
-	    
 	  </ion-card-content>
 	</ion-card>
 
